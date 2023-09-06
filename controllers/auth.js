@@ -10,7 +10,7 @@ const { generateAuthToken, generateRefreshToken } = require("../libs/jwt");
  */
 
 const signUp = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, phoneNumber } = req.body;
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -20,10 +20,19 @@ const signUp = async (req, res) => {
         error: err,
       });
     }
+    const existingPhone = await User.findOne({ phoneNumber });
+    if (existingPhone) {
+      return res.status(400).json({
+        success: false,
+        message: "Este Numero ya existe.",
+        error: err,
+      });
+    }
     const newUser = new User({
       name,
       email,
       password: await User.encryptPassword(password),
+      phoneNumber,
     });
     await newUser.save();
     res.status(201).json({
