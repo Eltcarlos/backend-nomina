@@ -17,7 +17,7 @@ const generateAuthToken = (user) => {
         email: user.email,
       },
       process.env.JWT_KEY,
-      { expiresIn: "10h" }
+      { expiresIn: "30d" }
     );
     return token;
   } catch (error) {

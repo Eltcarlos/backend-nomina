@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const raffleSchema = new mongoose.Schema(
   {
@@ -9,19 +9,15 @@ const raffleSchema = new mongoose.Schema(
     description: {
       type: String,
     },
-    availableTickets: {
-      type: Number,
-      required: true,
-    },
     soldTickets: [
       {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Ticket",
       },
     ],
     participatingUsers: [
       {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
     ],
@@ -30,9 +26,6 @@ const raffleSchema = new mongoose.Schema(
       enum: ["open", "closed", "suspend"],
       default: "open",
       trim: true,
-    },
-    finish_date: {
-      type: Number,
     },
     posterImage: {
       type: String,

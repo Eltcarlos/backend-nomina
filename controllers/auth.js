@@ -38,7 +38,6 @@ const signUp = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "El registro se realizo correctamente.",
-      data: newUser,
     });
   } catch (error) {
     res.status(500).json({
@@ -62,7 +61,7 @@ const login = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      res.status(401).json({
+      return res.status(401).json({
         success: false,
         message: "Invalid credentials.",
       });
@@ -70,7 +69,7 @@ const login = async (req, res) => {
 
     const isPasswordValid = await User.comparePassword(password, user.password);
     if (!isPasswordValid) {
-      res.status(401).json({
+      return res.status(401).json({
         success: false,
         message: "Invalid credentials.",
       });
@@ -80,8 +79,14 @@ const login = async (req, res) => {
     const refresh_token = generateRefreshToken(user);
 
     return res.status(201).json({
+      success: true,
       access_token,
       refresh_token,
+      data: {
+        uid: user._id,
+        email: user.email,
+        role: user.role,
+      },
     });
   } catch (error) {
     res.status(500).json({
